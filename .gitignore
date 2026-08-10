@@ -1,0 +1,7 @@
+# 実行時に作られるもの
+sessions/
+cache/
+render/
+*.log
+*.trace
+.DS_Store

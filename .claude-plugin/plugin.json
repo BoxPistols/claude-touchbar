@@ -1,0 +1,8 @@
+{
+  "name": "claude-touchbar",
+  "version": "0.1.0",
+  "description": "Claude Code のセッション状態を Touch Bar に表示し、そこから許可応答・スラッシュコマンドを送る (macOS + BetterTouchTool)",
+  "author": "BoxPistols",
+  "homepage": "https://github.com/BoxPistols/claude-touchbar",
+  "license": "MIT"
+}

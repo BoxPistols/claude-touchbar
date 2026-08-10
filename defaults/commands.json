@@ -1,0 +1,97 @@
+{
+  "_help": [
+    "このファイルを保存すると1〜2秒でTouch Barに自動反映されます（BTT操作は不要）。",
+    "label   : Touch Barに表示する文字（省略形・愛称なんでもOK）",
+    "command : 実際にCLIに入力される文字列",
+    "enter   : trueなら入力後にReturnまで送って即実行（省略時 false = 入力だけ）",
+    "          **基準: 開くだけ/見るだけ = true、作業が始まる・失われる = false。**",
+    "          Touch Barは目視せず触れるので、取り消せないものを即実行にしない。",
+    "enabled : falseにすると非表示のまま定義を残せる（省略時 true）",
+    "color   : 'R,G,B,A' 形式で個別の背景色（省略時 ダークグレー）",
+    "group   : 同じ名前を付けたボタンはフォルダにまとまる（省略時 トップレベル）。",
+    "          **常用は勧めない。** フォルダは BTT のグループ(630)で、ボタンと違い",
+    "          スクリプトを持てない＝自前で隠せない。ターミナル以外を操作している",
+    "          間も、許可プロンプトに答えている間も居座って幅を食い続ける。",
+    "          中身のボタンだけが消えて空のフォルダが残る形になる。",
+    "menu    : 番号選択メニューを開くコマンドなら選択肢の短縮ラベルを並べる",
+    "          (例 /model → ['Def','Opus','Fable','Sonn','Haiku'])。",
+    "          Touch Bar から押したときだけ番号ボタンが45秒間出る。",
+    "色の使い分け: 青=レビュー系 / 紫=モデル / 青緑=effort / 緑=usage。",
+    "オレンジ(214,138,30)は許可待ち表示と紛れるため使わないこと。"
+  ],
+  "buttons": [
+    {
+      "label": "review",
+      "command": "/review",
+      "color": "38,102,168,255",
+      "enter": false
+    },
+    {
+      "label": "model",
+      "command": "/model",
+      "color": "104,72,160,255",
+      "menu": [
+        "Def",
+        "Opus",
+        "Fable",
+        "Sonn",
+        "Haiku"
+      ],
+      "enter": true
+    },
+    {
+      "label": "effort",
+      "command": "/effort",
+      "color": "26,122,120,255",
+      "menu": [
+        "Low",
+        "Med",
+        "High",
+        "xHigh",
+        "Ultra"
+      ],
+      "enter": true
+    },
+    {
+      "label": "usage",
+      "command": "/usage",
+      "color": "58,122,80,255",
+      "enter": true
+    },
+    {
+      "label": "clear",
+      "command": "/clear",
+      "enabled": true,
+      "enter": false,
+      "color": "120,80,60,255"
+    },
+    {
+      "label": "compact",
+      "command": "/compact",
+      "enabled": true,
+      "enter": false,
+      "color": "120,80,60,255"
+    },
+    {
+      "label": "code-rev",
+      "command": "/code-review",
+      "enabled": true,
+      "enter": false,
+      "color": "38,102,168,255"
+    },
+    {
+      "label": "sec-rev",
+      "command": "/security-review",
+      "enabled": true,
+      "enter": false,
+      "color": "38,102,168,255"
+    },
+    {
+      "label": "simplify",
+      "command": "/simplify",
+      "enabled": true,
+      "enter": false,
+      "color": "38,102,168,255"
+    }
+  ]
+}

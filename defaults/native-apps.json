@@ -1,0 +1,7 @@
+{
+  "_comment": "ここに列挙したアプリが前面の間は、BTT ではなくアプリ自身(macOS ネイティブ)の Touch Bar を出す。bundle id は `osascript -e 'id of app \"アプリ名\"'` で調べる。編集したら python3 ~/.claude/btt/cc-nativebar.py を実行(要 BTT 再起動)。仕組みは docs/DESIGN.md §17",
+  "_example": [
+    {"bundle_id": "com.apple.Music", "name": "Music"}
+  ],
+  "apps": []
+}

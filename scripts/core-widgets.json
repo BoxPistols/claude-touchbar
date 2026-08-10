@@ -1,0 +1,103 @@
+[
+ {
+  "BTTTriggerType": 642,
+  "BTTTriggerTypeDescriptionReadOnly": "シェルスクリプト / タスクウィジェット",
+  "BTTTriggerTypeDescription": "Claude Code",
+  "BTTTriggerClass": "BTTTriggerTypeTouchBar",
+  "BTTPredefinedActionType": 137,
+  "BTTPredefinedActionName": "ターミナルコマンドを実行（非同期、ノンブロッキング）",
+  "BTTTerminalCommand": "/usr/bin/python3 $HOME/.claude/btt/cc-focus.py",
+  "BTTShellScriptWidgetGestureConfig": "/bin/bash:::-c",
+  "BTTOrder": 0,
+  "BTTMergeIntoTouchBarGroups": 0,
+  "BTTWidgetName": "Claude Code",
+  "BTTTriggerConfig": {
+   "BTTTouchBarButtonCornerRadius": 6,
+   "BTTTouchBarItemPlacement": 0,
+   "BTTTouchBarAlwaysShowButton": true,
+   "BTTTouchBarShellScriptString": ". \"$HOME/.claude/btt/cc-widget.sh\" status",
+   "BTTTouchBarButtonColor": "0.000000, 0.000000, 0.000000, 0.000000",
+   "BTTTouchBarButtonFontSize": 12,
+   "BTTTBWidgetWidth": 210,
+   "BTTTouchBarFreeSpaceAfterButton": 6,
+   "BTTTouchBarScriptUpdateInterval": 1
+  },
+  "BTTBelongsToApp": "Global",
+  "BTTNotes": "cc-touchbar-core"
+ },
+ {
+  "BTTTriggerType": 642,
+  "BTTTriggerTypeDescriptionReadOnly": "シェルスクリプト / タスクウィジェット",
+  "BTTTriggerTypeDescription": "CC allow",
+  "BTTTriggerClass": "BTTTriggerTypeTouchBar",
+  "BTTPredefinedActionType": 137,
+  "BTTPredefinedActionName": "ターミナルコマンドを実行（非同期、ノンブロッキング）",
+  "BTTTerminalCommand": "/usr/bin/python3 $HOME/.claude/btt/cc-send.py allow",
+  "BTTShellScriptWidgetGestureConfig": "/bin/bash:::-c",
+  "BTTNotes": "cc-touchbar-perm",
+  "BTTOrder": 1,
+  "BTTMergeIntoTouchBarGroups": 0,
+  "BTTWidgetName": "CC allow",
+  "BTTTriggerConfig": {
+   "BTTTouchBarButtonCornerRadius": 6,
+   "BTTTouchBarItemPlacement": 0,
+   "BTTTouchBarShellScriptString": ". \"$HOME/.claude/btt/cc-widget.sh\" perm-allow",
+   "BTTTouchBarAlwaysShowButton": false,
+   "BTTTouchBarButtonFontSize": 12,
+   "BTTTBWidgetWidth": 100,
+   "BTTTouchBarFreeSpaceAfterButton": 4,
+   "BTTTouchBarScriptUpdateInterval": 1
+  },
+  "BTTBelongsToApp": "Global"
+ },
+ {
+  "BTTTriggerType": 642,
+  "BTTTriggerTypeDescriptionReadOnly": "シェルスクリプト / タスクウィジェット",
+  "BTTTriggerTypeDescription": "CC always",
+  "BTTTriggerClass": "BTTTriggerTypeTouchBar",
+  "BTTPredefinedActionType": 137,
+  "BTTPredefinedActionName": "ターミナルコマンドを実行（非同期、ノンブロッキング）",
+  "BTTTerminalCommand": "/usr/bin/python3 $HOME/.claude/btt/cc-send.py always",
+  "BTTShellScriptWidgetGestureConfig": "/bin/bash:::-c",
+  "BTTNotes": "cc-touchbar-perm",
+  "BTTOrder": 2,
+  "BTTMergeIntoTouchBarGroups": 0,
+  "BTTWidgetName": "CC always",
+  "BTTTriggerConfig": {
+   "BTTTouchBarButtonCornerRadius": 6,
+   "BTTTouchBarItemPlacement": 0,
+   "BTTTouchBarShellScriptString": ". \"$HOME/.claude/btt/cc-widget.sh\" perm-always",
+   "BTTTouchBarAlwaysShowButton": false,
+   "BTTTouchBarButtonFontSize": 12,
+   "BTTTBWidgetWidth": 100,
+   "BTTTouchBarFreeSpaceAfterButton": 4,
+   "BTTTouchBarScriptUpdateInterval": 1
+  },
+  "BTTBelongsToApp": "Global"
+ },
+ {
+  "BTTTriggerType": 642,
+  "BTTTriggerTypeDescriptionReadOnly": "シェルスクリプト / タスクウィジェット",
+  "BTTTriggerTypeDescription": "CC reject",
+  "BTTTriggerClass": "BTTTriggerTypeTouchBar",
+  "BTTPredefinedActionType": 137,
+  "BTTPredefinedActionName": "ターミナルコマンドを実行（非同期、ノンブロッキング）",
+  "BTTTerminalCommand": "/usr/bin/python3 $HOME/.claude/btt/cc-send.py reject",
+  "BTTShellScriptWidgetGestureConfig": "/bin/bash:::-c",
+  "BTTNotes": "cc-touchbar-perm",
+  "BTTOrder": 3,
+  "BTTMergeIntoTouchBarGroups": 0,
+  "BTTWidgetName": "CC reject",
+  "BTTTriggerConfig": {
+   "BTTTouchBarButtonCornerRadius": 6,
+   "BTTTouchBarItemPlacement": 0,
+   "BTTTouchBarShellScriptString": ". \"$HOME/.claude/btt/cc-widget.sh\" perm-reject",
+   "BTTTouchBarAlwaysShowButton": false,
+   "BTTTouchBarButtonFontSize": 12,
+   "BTTTBWidgetWidth": 100,
+   "BTTTouchBarFreeSpaceAfterButton": 4,
+   "BTTTouchBarScriptUpdateInterval": 1
+  },
+  "BTTBelongsToApp": "Global"
+ }
+]

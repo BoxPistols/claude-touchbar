@@ -1,0 +1,29 @@
+{
+  "_help": [
+    "ブラウザで動く Web アプリ向けの Touch Bar ボタン定義。",
+    "`web-sync.py sync` を実行すると BTT へ反映される。",
+    "",
+    "label   : Touch Bar に表示する文字（短く。長いと幅を食う）",
+    "keys    : 送るキーコード列 'modifier,...,key'。55=Cmd 56=Shift 58=Opt 59=Ctrl",
+    "          主要キー: A0 S1 D2 Z6 X7 C8 V9 W13 T17 I34 Return36 K40 ,43 /44",
+    "bundle  : このアプリが最前面のときだけ送る（bundle id）。必須。",
+    "enabled : false で定義を残したまま非表示（省略時 true）",
+    "color   : 'R,G,B,A'（省略時 ダークグレー）",
+    "",
+    "重要: BTT の AppleScript ではボタンをアプリ別スコープに置けない",
+    "（add_new_trigger に渡した BTTBelongsToApp は保存時に破棄される・実測）。",
+    "そのためボタンは Global に作られ、押下時に web-sync.py send が",
+    "最前面アプリを照合してから送る。照合に外れたら何も送らない。",
+    "オレンジ(214,138,30)は Claude Code の許可待ちと紛れるため使わない。"
+  ],
+  "buttons": [],
+  "_example": [
+    {
+      "label": "Undo",
+      "keys": "55,6",
+      "bundle": "com.google.chrome",
+      "color": "58,58,60,255",
+      "enabled": false
+    }
+  ]
+}

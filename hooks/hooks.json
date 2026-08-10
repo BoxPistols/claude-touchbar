@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" idle", "async": true}]}
+    ],
+    "UserPromptSubmit": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" busy", "async": true}]}
+    ],
+    "PreToolUse": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" busy", "async": true}]}
+    ],
+    "PostToolUse": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" busy", "async": true}]}
+    ],
+    "PermissionRequest": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" permission", "async": true}]}
+    ],
+    "PermissionDenied": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" busy", "async": true}]}
+    ],
+    "Notification": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" waiting", "async": true}]}
+    ],
+    "Stop": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" idle", "async": true}]}
+    ],
+    "SessionEnd": [
+      {"hooks": [{"type": "command", "command": "/usr/bin/python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/cc-hook.py\" end", "async": true}]}
+    ]
+  }
+}
