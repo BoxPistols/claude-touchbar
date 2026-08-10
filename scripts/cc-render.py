@@ -121,6 +121,32 @@ def write(name, data, cache, force):
             pass
 
 
+def sweep_stale(out, cache):
+    """描画対象でなくなったウィジェットの出力ファイルを消す。
+
+    ボタンを減らすと（`enabled: false` にする等）`render_all()` はその番号を
+    返さなくなるが、**前回書いたファイルはそのまま残る**。BTT 側のトリガーも
+    同時に消えるので普段は誰も読まないが、あとで**同じ番号を再び有効化した
+    瞬間だけ**、新しいウィジェットが古い内容を読んで前のラベルを表示しうる
+    （次のティックで直るので一瞬だが、押すと別のコマンドが飛ぶ）。
+    """
+    for fn in os.listdir(RENDER):
+        if not fn.endswith(".json"):
+            continue
+        name = fn[:-5]
+        # 消してよいのは番号付きの動的ウィジェットだけ。status や perm-* は
+        # 常に render_all() が返すので、ここに来る時点で異常（触らない）
+        if not (name.startswith("cmd-") or name.startswith("menu-")):
+            continue
+        if name in out:
+            continue
+        try:
+            os.remove(os.path.join(RENDER, fn))
+            cache.pop(name, None)
+        except OSError:
+            pass
+
+
 def sync_commands():
     """commands.json が編集されていたらボタン同期を起動する。
     以前は cc-widget.sh が毎秒 stat していたが、読み手を組み込みだけに
@@ -194,8 +220,10 @@ def main():
             break
         try:
             force = tick % FORCE_WRITE_EVERY == 0
-            for name, data in render_all().items():
+            out = render_all()
+            for name, data in out.items():
                 write(name, data, cache, force)
+            sweep_stale(out, cache)
             sync_commands()
         except Exception:
             # 1ティック失敗しても常駐は続ける（表示は前回値が残る）

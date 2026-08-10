@@ -75,21 +75,21 @@
     {
       "label": "code-rev",
       "command": "/code-review",
-      "enabled": true,
+      "enabled": false,
       "enter": false,
       "color": "38,102,168,255"
     },
     {
       "label": "sec-rev",
       "command": "/security-review",
-      "enabled": true,
+      "enabled": false,
       "enter": false,
       "color": "38,102,168,255"
     },
     {
       "label": "simplify",
       "command": "/simplify",
-      "enabled": true,
+      "enabled": false,
       "enter": false,
       "color": "38,102,168,255"
     }
