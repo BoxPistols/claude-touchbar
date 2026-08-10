@@ -374,6 +374,36 @@ def main():
     with open(STAMP, "w") as f:
         f.write("%d" % mtime)
     print("sync done: %d buttons, %d menu slots" % (len(buttons), menu_n))
+    warn_overflow(buttons)
+
+
+# Touch Bar の使用可能域。§16.5 で実機画像の画素から確定した値
+#   306px 〜 1356px = 1050px ÷ 1.34 px/pt = 784pt
+BAR_WIDTH_PT = 784
+STATUS_SAMPLE = "Opus5 1M xhigh · S99 W99"   # 平常時の実測に近い長さ
+
+
+def warn_overflow(buttons):
+    """収まらない設定を**黙って切らない**。どこから切れるかを名指しで出す。
+
+    Touch Bar は溢れても何も言わずに右端から欠ける。ユーザーからは
+    「ボタンが消えた」に見えて原因が分からない（実際に「右端が切れている」
+    という報告が出た）。ここで幅を計算して、何個目から切れるかを伝える。
+    """
+    try:
+        used = widget_width(STATUS_SAMPLE) + 4
+        for i, b in enumerate(buttons):
+            used += widget_width(b.get("label", "")) + 4
+            if used > BAR_WIDTH_PT:
+                print("! 幅超過: %d 個目 '%s' から右端で切れます "
+                      "(必要 %dpt / 使用可能 %dpt)"
+                      % (i + 1, b.get("label", ""), used, BAR_WIDTH_PT))
+                print("  収まるのは %d 個までです。使わないボタンを "
+                      "\"enabled\": false にするか、ラベルを短くしてください"
+                      % i)
+                return
+    except Exception:
+        pass   # 警告のために同期を失敗させない
 
 
 if __name__ == "__main__":

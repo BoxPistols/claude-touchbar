@@ -84,6 +84,8 @@ def render_all():
     # "" は「押下なし」。None を渡すと render_cmd 側が自分で読み直してしまう
     pressed = menu.pressed_label() or ""
     target = cc.target_session(sessions, fb)
+    # False は「メニュー無し」。None は「未指定」で render_cmd が引き直す
+    menu_open = menu.active_menu(sessions, fb) or False
     if target is None:
         # 送り先が無いならコマンドボタンは全部隠す。render_cmd に None を
         # 渡すと「未指定」と区別できず、ウィジェットごとに引き直してしまう
@@ -91,7 +93,8 @@ def render_all():
             out["cmd-%d" % i] = dict(menu.HIDDEN)
     else:
         for i in range(len(buttons)):
-            out["cmd-%d" % i] = menu.render_cmd(i, fb, buttons, pressed, target)
+            out["cmd-%d" % i] = menu.render_cmd(i, fb, buttons, pressed,
+                                                target, menu_open)
     for n in range(1, cc.menu_slots() + 1):
         out["menu-%d" % n] = menu.render_show(n, fb, sessions)
     return out

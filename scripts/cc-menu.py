@@ -274,7 +274,8 @@ def do_send(n):
         do_close()
 
 
-def render_cmd(i, fb=None, buttons=None, pressed=None, target=None):
+def render_cmd(i, fb=None, buttons=None, pressed=None, target=None,
+               menu_open=None):
     """コマンドボタン1個ぶんの出力 dict。
 
     629 のプレーンボタンだった頃は表示条件を持てず、ターミナル以外を操作して
@@ -282,6 +283,9 @@ def render_cmd(i, fb=None, buttons=None, pressed=None, target=None):
     **送り先が解決できないときも隠す** — フロントがターミナルでも、Claude が
     動いていないタブなら押しても意味が無く、「押せるのに何も起きない」は
     「出ない」より悪い（ユーザーは壊れたと判断する）。
+
+    `menu_open` は cc-render.py がティックごとに1回だけ計算して渡す
+    （None は「未指定」で自分で引き直す。「メニュー無し」は False）。
     """
     if buttons is None:
         buttons = cc.command_buttons()
@@ -296,6 +300,14 @@ def render_cmd(i, fb=None, buttons=None, pressed=None, target=None):
     # （Touch Bar は既に右端が切れており、増やす前に減らす必要がある）
     # (b) プロンプトに答える前に /clear のような取り消せないものを押す事故を防ぐ
     if t.get("state") == "waiting" and t.get("waiting_kind") == "permission":
+        return dict(HIDDEN)
+    # 番号メニューが開いている間も同じ理由で隠す。**幅の実測で必要性が確定した**:
+    # status + コマンド9個で既に 989pt（使用可能 784pt）を超えており、そこへ
+    # 番号5個が乗ると 1398pt になる。隠せば 651pt に収まる（§19）。
+    # 事故防止の観点も同じで、番号を選ぼうとして `/clear` に触れる余地を消す。
+    if menu_open is None:
+        menu_open = active_menu(None, fb)
+    if menu_open:
         return dict(HIDDEN)
 
     b = buttons[i]
