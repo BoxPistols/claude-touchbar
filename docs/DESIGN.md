@@ -189,6 +189,7 @@ claude-touchbar/
 ├── cc-provision.py    コアウィジェットの復元/書き出し/更新
 ├── commands.json      ユーザー編集用キーワードマップ
 ├── web-sync.py        web-shortcuts.json → BTTボタン差分同期＋押下時の送信（§15）
+├── web-front.applescript  Chromeの現在タブを web-front に書く常駐（§15.1）
 ├── web-shortcuts.json ブラウザWebアプリ向けボタン定義（ユーザー編集用）
 ├── menu.json          開いているメニューの印（TTL 45秒 + 対象GUID）
 ├── press.json         直近の押下（フィードバック表示用）
@@ -684,6 +685,75 @@ Touch Bar から Chrome 上の Web アプリへショートカットキーを送
 - 検証は `execute_assigned_actions_for_trigger`（§13.6）。結果は `web-sync.trace` に
   残るので、「BTT が実行していない（ファイル無し）」「対象アプリでないので送らな
   かった（skip）」「送った（sent）」を切り分けられる
+
+### 15.1 開いているページで出し分ける（match・2026-08-15）
+
+**bundle だけでは足りなかった。** 単一の Web アプリ向けのボタンなのに、Chrome が
+最前面ならどのページでも出る。ブラウザは 1 日中最前面なので、実質「常時居座り」と
+同じ状態になっていた（利用者の指摘: 「使っていないときにでも出てしまう」）。
+
+`match` を書くと URL とタブのタイトルで絞れる。照合対象は
+`~/.claude/btt/web-front` の `"<URL>\t<タイトル>"` 1 行。
+
+**URL をウィジェットから直接取ってはいけない（実測）**:
+
+| 方法 | 1 回のコスト |
+|---|---|
+| `osascript` 起動のみ | 62ms |
+| `osascript` 起動 + Chrome へ初回 AppleEvent | 191〜215ms |
+| **同一プロセス内の 2 回目以降** | **15ms** |
+| 常駐（1 秒間隔）の定常コスト | 20 秒で 0.02 秒 CPU ＝ 1 コアの 0.1% |
+
+2 秒間隔 × ボタン数で回せば前者は 1 コアの 10% を燃やす。§12.1 と同じ結論に
+なるので、**常駐 1 本（`web-front.applescript`）に集約し、ウィジェットは
+bash 組み込みの `read` で 1 行読むだけ**にした。ウィジェット側の追加コストは実質ゼロ。
+
+- 常駐は launchd（`com.claude-touchbar.web-front`）。**載せる判断は `sync` が持つ**
+  — `match` 付きのボタンが 1 つでもあれば載せ、無くなれば降ろす。match を使わない
+  利用者の機械に常駐を置き去りにしない
+- **`tell application` の前に `is running` を見ること。** 無いと Chrome が起動して
+  いないときに勝手に起動する
+- 書き込みは値が変わったときだけ tmp→mv。毎秒 read する側に中途半端な行を見せない
+- **TCC（オートメーション権限）は責任プロセスごとに別**。ターミナルから叩いた
+  osascript は iTerm の許可で通るが、launchd 配下では osascript 自身として
+  改めて許可を求める（`Prompting for access to indirect object Google Chrome.app
+  by osascript`）。**承認するまで AppleEvent は mach_msg で止まったまま**で、
+  エラーも出ない。「常駐は動いているのにファイルが更新されない」ときはこれを疑う
+  （`log show --predicate 'process == "tccd"'` で確認できる）
+- **押下側にも同じガードを足した。** 表示は最大 1 秒古いので、その隙にタブを
+  変えて押されると対象外のページへキーが飛ぶ（Chrome の `Cmd+K` はアドレスバー）。
+  ここで Chrome へ問い直すと 200ms 待たせるので、常駐が書いた値を使う
+- 常駐が死んでいるとき（ファイルが無い/空）は**隠す側に倒す**。出す側に倒すと
+  常時居座りに戻るのに気づけない。状態は `web-sync.py status` に出る
+- URL だけでなくタイトルも見るのは、`localhost:3000` が他プロジェクトの dev
+  サーバと区別できないため
+- **`update_trigger` は `BTTActionsToExecute` を空配列で上書きしても旧サブアクションを
+  消さない**（domdom-inspector 側の実測・2026-08-15）。幅・order・ラベル・
+  `BTTTerminalCommand`・表示スクリプトは反映されるのにこれだけ残り、残った 264 が
+  主アクションと一緒に走って **137 側の照合を素通りしてキーが飛ぶ**。`cmd_sync` が
+  delete→add で作り直しているのはこの点でも正しい（更新で済ませないこと）
+
+**ウィジェット周りの実測（出典: domdom-inspector 側のセッション・2026-08-15。こちらでは未再現）**:
+
+- **`refresh_widget` は何もしない。** 実 UUID に 20 回投げてもスクリプトの実行回数が
+  変わらない（心拍ファイルで計測）。戻り値は常に `missing value` なので、呼べたことは
+  効いた証拠にならない。押下直後の即時反映はできず、更新間隔を詰めるしかない
+- **`BTTTouchBarScriptUpdateInterval` は小数を受ける。** 0.3 で実測 3.2 回/秒
+- **`hidden: true` を返したウィジェットもポーリングされ続ける。** 一度隠れると戻らない
+  という心配は要らない
+- **642 の幅は `BTTTBWidgetWidth` 単独では効かない。** 実機写真の before/after で、
+  そのキーだけを入れた状態では幅が文字数に比例していた（Auto のまま）。
+  `BTTTouchBarButtonUseFixedWidth: 1` + `BTTTouchBarButtonWidth` を足すと揃った。
+  ただし**「`BTTTBWidgetWidth` が完全に無効」までは示されていない**（併用時の寄与は
+  未検証）。確認手順は issues/2。上の「642 は `BTTTBWidgetWidth`」の記述はここで
+  暫定的に否定されている
+- **`get_triggers` で読み返せることは「効いている」証拠にならない。** BTT は知らない
+  キーもそのまま保存して返す。この幅キーの誤りはそれが原因で生まれた。**描画の判定は
+  実機の見た目でしか取れない**
+
+**BTTOrder の帯**（Touch Bar は複数プロジェクトの共有資源。重複すると並びが混ざる）:
+`0–55 macenv` / `200–201 local-ui-builder (ここ)` / `300–302 domdom-inspector`。
+domdom は平常時 1 個・押すと 3 個に展開するため、伸縮で隣を押し出さないよう最後尾。
 
 ## 16. 許可応答ボタンのラベルを実態に合わせる（2026-08-06）
 

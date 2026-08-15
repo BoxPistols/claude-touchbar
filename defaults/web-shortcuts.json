@@ -7,6 +7,12 @@
     "keys    : 送るキーコード列 'modifier,...,key'。55=Cmd 56=Shift 58=Opt 59=Ctrl",
     "          主要キー: A0 S1 D2 Z6 X7 C8 V9 W13 T17 I34 Return36 K40 ,43 /44",
     "bundle  : このアプリが最前面のときだけ送る（bundle id）。必須。",
+    "match   : 開いているページの絞り込み。'|' 区切りの部分一致（大文字小文字無視）。",
+    "          URL とタブのタイトルの両方を見る。省略すると bundle だけで判定する",
+    "          （＝そのブラウザが前面ならどのページでも出る）。",
+    "          例: 'local-ui-builder|Local UI Builder'",
+    "          match を 1 つでも使うと、Chrome の現在タブを見る常駐が自動で載る",
+    "          （launchd: com.claude-touchbar.web-front。全部消せば自動で降りる）",
     "enabled : false で定義を残したまま非表示（省略時 true）",
     "color   : 'R,G,B,A'（省略時 ダークグレー）",
     "",
@@ -22,6 +28,7 @@
       "label": "Undo",
       "keys": "55,6",
       "bundle": "com.google.chrome",
+      "match": "example.com|My App",
       "color": "58,58,60,255",
       "enabled": false
     }
