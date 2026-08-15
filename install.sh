@@ -20,7 +20,8 @@ done
 # ── 1. スクリプトを配置 ────────────────────────────────────────────
 # 状態ファイルの置き場を固定パスにしているのは意図的。詳細は docs/DESIGN.md §18
 mkdir -p "$DEST"
-cp "$REPO"/scripts/*.py "$REPO"/scripts/*.sh "$REPO"/scripts/core-widgets.json "$DEST/"
+cp "$REPO"/scripts/*.py "$REPO"/scripts/*.sh "$REPO"/scripts/*.applescript \
+   "$REPO"/scripts/core-widgets.json "$DEST/"
 chmod +x "$DEST"/*.py "$DEST"/*.sh
 say "✔ スクリプトを $DEST に配置"
 

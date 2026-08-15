@@ -78,7 +78,7 @@ $EDITOR ~/.claude/btt/commands.json
 |---|---|
 | `commands.json` | コマンドボタンの定義 |
 | `permissions.json` | 許可応答ボタンのラベル |
-| `web-shortcuts.json` | ブラウザ Web アプリ向けボタン |
+| `web-shortcuts.json` | ブラウザ Web アプリ向けボタン（`match` で開いているページまで絞れる） |
 | `native-apps.json` | **BTT を出さずアプリ自身の Touch Bar を通す**アプリ |
 
 ## 設計と実測記録
